@@ -1,56 +1,55 @@
 library ieee;
 use ieee.std_logic_1164.all;
 
-library work;
-use work.all;
-
 entity MUX_Tb is 
+    --empty
 end entity MUX_Tb;
 
---Declare signals that will connect to the DUT
+
 architecture simulation of MUX_Tb is
-    signal S_Tb :std_logic;
-    signal X_Tb :std_logic;
-    signal Y_Tb :std_logic;
-    signal Z_Tb :std_logic;
+    --Declare signals that will connect to the DUT
+   component MUX is
+    port(S,X,Y : in std_logic;
+    Z : out std_logic
+    );
+end component;
+
+signal S_in, Y_in, X_in, Z_out : std_logic;
+
 begin
---Instantiate the DUI inside the testbench
---Unit under test (uut)
-uut: entity work.MUX
-port map(
-    S => S_Tb,
-    X => X_Tb,
-    Y => Y_Tb,
-    Z => Z_Tb
-);
---Write a stimulus process
-stim_proc: process
+ -- Connect DUT
+process
 begin
     --Write comments explaining tests
 
     --Test 1: S = '0' -> expect Z = Y
-    S_Tb <= '0';
-    X_Tb <= '0';
-    Y_Tb <= '1';
+    S_in <= '0';
+    X_in <= '0';
+    Y_in <= '1';
     wait for 10 ns;
+    assert (Z_out = '0') report "Fail Z != Y" severity error; 
 
     --Test 2
-    X_Tb <= '1';
-    Y_Tb <= '0';
+    X_in <= '1';
+    Y_in <= '0';
     wait for 10 ns;
+    assert (Z_out = '1') report "Fail Z != Y" severity error; 
 
     --Test 3: S = '1' -> expect Z = X
-    S_Tb <= '1';
-    X_Tb <= '1';
-    Y_Tb <= '0';
+    S_in <= '1';
+    X_in <= '1';
+    Y_in <= '0';
     wait for 10 ns;
+    assert (Z_out = '0') report "Fail Z != X" severity error; 
 
     --Test 4
-    X_Tb <= '0';
-    Y_Tb <= '1';
+    X_in <= '0';
+    Y_in <= '1';
     wait for 10 ns;
+    assert (Z_out = '1') report "Fail Z != X" severity error; 
 
     -- Simulation end
+    assert false report "Test done." severity note;
     wait;
 end process;
 end simulation;
