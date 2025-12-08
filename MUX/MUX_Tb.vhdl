@@ -18,6 +18,13 @@ signal S_in, Y_in, X_in, Z_out : std_logic;
 
 begin
  -- Connect DUT
+DUT: entity work.MUX 
+port map (
+S => S_in, 
+X => X_in, 
+Y => Y_in, 
+Z => Z_out );
+
 process
 begin
     --Write comments explaining tests
